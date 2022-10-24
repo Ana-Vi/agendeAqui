@@ -1,7 +1,7 @@
 {% extends 'sistema.html' %}
 
 {% block titulo %}
-Login
+Cadastro
 {% endblock %}
 
 {% block conteudo %}
@@ -20,15 +20,6 @@ Login
         <input type="checkbox" class="form-check-input" id="exampleCheck1">
         <label class="form-check-label" for="exampleCheck1">Clique em mim</label>
     </div>
-    <div class="row mt-5">
-         <div class="col-6 text-left">
-            <label>Deseja se cadastrar?</label>
-            <a href="cadastro/" class="btn btn-primary">Click aqui</a>
-        </div>
-        <div class="col-6 text-right">
-            <button type="submit" class="btn btn-primary">Logar</button>
-        </div>
-    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
 </form>
-
 {% endblock %}
