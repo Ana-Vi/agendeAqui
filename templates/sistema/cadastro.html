@@ -5,7 +5,13 @@ Cadastro
 {% endblock %}
 
 {% block conteudo %}
+<!-- Campos necessários: 'cpf', 'senha','nome', 'telefone', 'salao', 'url', 'email' -->
+<!-- caso queira ver o gerado automaticamente, descomentar linha a seguir -->
+<!-- {{ form }} -->
+
+
 <form name="cadastro" id="cadastro" method="post" action="/create/">
+    {% csrf_token %}
     <div class="form-group">
         <label for="exampleInputEmail1">Endereço de email</label>
         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"

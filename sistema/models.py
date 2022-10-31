@@ -8,3 +8,4 @@ class Usuario(models.Model):
     telefone = models.CharField(max_length=15)
     salao = models.BooleanField()
     url = models.TextField(default='')
+    email = models.CharField(max_length=100, default='')

@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from sistema.forms import UsuarioForm
 from sistema.models import Usuario
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 def login(request):
     data = {
         'nomefuncao': 'Login',
     }
-    return render(request, 'sistema/login.html', data)
+    return render(request, 'sistema/login.html')
 
 
 def cadastro(request):
