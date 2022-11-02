@@ -3,14 +3,28 @@ from django.shortcuts import render, redirect
 from sistema.forms import UsuarioForm
 from django.contrib.auth.models import User
 from sistema.models import Usuario
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as login_django
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 # Create your views here.
 def login(request):
-    data = {
-        'nomefuncao': 'Login',
-    }
-    return render(request, 'sistema/login.html')
+    if request.method == "GET":
+        data = {
+            'nomefuncao': 'Login',
+        }
+        return render(request, 'sistema/login.html')
+    else:
+        username = request.POST.get('username')
+        senha = request.POST.get('senha')
+        user = authenticate(username=username, password=senha)
+        if user:
+            login_django(request, user)
+            return redirect('home')
+        else:
+            return HttpResponse("Inválido")
+
 
 
 def cadastro(request):
@@ -43,9 +57,9 @@ def cadastro(request):
                 user.save()
                 usuario = Usuario(nome=nome, email=email, senha=senha, cpf=cpf, telefone=telefone, salao=salao, url=url)
                 usuario.save()
-                return redirect('home')
+                return redirect('login')
 
 
+@login_required(login_url="/")
 def home(request):
     return render(request, 'sistema/home.html')
-

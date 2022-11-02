@@ -5,25 +5,22 @@ Login
 {% endblock %}
 
 {% block conteudo %}
-<form>
+<form name="login" id="login" method="POST" action="">
+    {% csrf_token %}
     <div class="form-group">
-        <label for="exampleInputEmail1">Endereço de email</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-               placeholder="Seu email">
+        <label for="username">Nome do Usuário</label>
+        <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp"
+               placeholder="Seu username">
         <small id="emailHelp" class="form-text text-muted">Nunca vamos compartilhar seu email, com ninguém.</small>
     </div>
     <div class="form-group">
-        <label for="exampleInputPassword1">Senha</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha">
-    </div>
-    <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Clique em mim</label>
+        <label for="senha">Senha</label>
+        <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
     </div>
     <div class="row mt-5">
          <div class="col-6 text-left">
             <label>Deseja se cadastrar?</label>
-            <a href="cadastro/" class="btn btn-primary">Click aqui</a>
+            <a href="cadastro/" class="btn btn-primary">Clique aqui</a>
         </div>
         <div class="col-6 text-right">
             <button type="submit" class="btn btn-primary">Logar</button>
