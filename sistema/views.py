@@ -55,7 +55,7 @@ def cadastro(request):
             else:
                 user = User.objects.create_user(nome, email, senha)
                 user.save()
-                usuario = Usuario(nome=nome, email=email, senha=senha, cpf=cpf, telefone=telefone, salao=salao, url=url)
+                usuario = Usuario(nome=nome, email=email, senha=senha, cpf=cpf, telefone=telefone, salao=salao, url=url, codigo_auth_user=user.id)
                 usuario.save()
                 return redirect('login')
 
