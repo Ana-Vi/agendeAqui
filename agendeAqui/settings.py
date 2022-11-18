@@ -129,6 +129,6 @@ STATICFILES_DIRS = [
     #problema: quando esse projeto for para produção, o servidor web pode ser linux
     #windows, etc..., e consequentemente o caminho será diferente
     #os.path.join resolve esse problema
-    os.path.join(BASE_DIR, 'templates/static')
+    os.path.join(BASE_DIR, 'static')
 ]
 
