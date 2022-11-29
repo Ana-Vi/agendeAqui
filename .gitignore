@@ -1,0 +1,4 @@
+
+*.sqlite3-journal
+*.sqlite3
+db.sqlite3
