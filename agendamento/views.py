@@ -49,3 +49,4 @@ def agenda(request):
             'agenda': agenda,
         }
         return render(request, 'agendamento/agenda.html', data)
+
