@@ -56,4 +56,4 @@ def cadastro(request):
 
 @login_required(login_url="/")
 def home(request):
-    return render(request, 'sistema/home.html')
+    return render(request, 'agendamento/agenda.html')
