@@ -39,12 +39,6 @@ def cadastro(request):
         senha = request.POST.get('senha')
         cpf = request.POST.get('cpf')
         telefone = request.POST.get('telefone')
-        salao = request.POST.get('salao')
-        if salao == 'on':
-            salao = True
-        else:
-            salao = False
-        url = request.POST.get('url')
         usuario = Usuario.objects.filter(email=email)
         if usuario:
             return HttpResponse('Erro! O e-mail: ' + email + ' está sendo usado por outro cadastro')
@@ -55,7 +49,7 @@ def cadastro(request):
             else:
                 user = User.objects.create_user(email, email, senha)
                 user.save()
-                usuario = Usuario(nome=nome, email=email, senha=senha, cpf=cpf, telefone=telefone, salao=salao, url=url, codigo_auth_user=user.id)
+                usuario = Usuario(nome=nome, email=email, senha=senha, cpf=cpf, telefone=telefone, codigo_auth_user=user.id)
                 usuario.save()
                 return redirect('login')
 

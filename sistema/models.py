@@ -7,7 +7,5 @@ class Usuario(models.Model):
     senha = models.CharField(max_length=500)
     nome = models.CharField(max_length=255)
     telefone = models.CharField(max_length=15)
-    salao = models.BooleanField(default="False")
-    url = models.TextField(default='')
     email = models.CharField(max_length=100, default='')
     codigo_auth_user = models.CharField(max_length=8, default='')
