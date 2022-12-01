@@ -15,8 +15,6 @@ def cadastrar(request):
         }
         return render(request, 'agendamento.html', data)
     else:
-        id_usuario_salao = request.POST.get('salao')
-        id_usuario_cliente = request.user.id
         hora_inicial = request.POST.get('hora_inicial')
         hora_final = request.POST.get('hora_final')
         data = request.POST.get('data')
@@ -27,12 +25,10 @@ def cadastrar(request):
 
         if agendamento:
             return HttpResponse('Erro! O horário: ' + data + '->' + hora_inicial + ' está sendo usado por outro cadastro')
-        elif id_usuario_salao == '':
-            return HttpResponse('Insira o salão')
         elif data == '':
             return HttpResponse('Insira a data')
         else:
-            agendamento = Agendamentos(id_usuario_salao = id_usuario_salao, id_usuario_cliente = id_usuario_cliente, hora_inicial=hora_inicial, hora_final=hora_final, data = data, valor_total=valor_total, duracao_total=duracao_total)
+            agendamento = Agendamentos(hora_inicial=hora_inicial, hora_final=hora_final, data = data, valor_total=valor_total, duracao_total=duracao_total)
             return redirect('home')
 
 
