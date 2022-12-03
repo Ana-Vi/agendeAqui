@@ -26,6 +26,24 @@ def cadastrar(request):
                                      valor=valor, id_usuario=id_usuario)
         procedimento.save()
 
+def update(request,pk):
+    if request.method =="GET":
+        data = {
+            'nomefuncao' : 'Atualizar procedimento',
+            'procedimento': Procedimentos.objects.get(pk=pk)
+        }
+        return render(request,'procedimento/procedimento.html', data)
+    else:
+        nome = request.POST.get('nome')
+        duracao = request.POST.get('duracao')
+        valor = request.POST.get('valor')
+
+        procedimento = Procedimentos.objects.get(pk=pk)
+        procedimento.nome = nome
+        procedimento.duracao = duracao
+        procedimento.valor = valor
+        procedimento.save()
+        return redirect('procedimento')
 def delete(request, pk):
     db = Procedimentos.objects.get(pk=pk)
     db.delete()
