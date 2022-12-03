@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from agendamento.models import Agendamentos
 from horario.models import Horarios
+from procedimento.models import Procedimentos
 from sistema.models import Usuario
 
 
@@ -14,18 +15,19 @@ def cadastrar(request):
     if request.method == "GET":
         data = {
             'nomefuncao': 'Agendar Horário',
+            'procedimentos': Procedimentos.objects.filter(id_usuario = request.user.id)
         }
         return render(request, 'agendamento/cadastrar.html', data)
     else:
         hora_inicial = request.POST.get('hora_inicial')
-        hora_final = request.POST.get('hora_final')
         data = request.POST.get('data')
         valor_total = request.POST.get('valor_total')
         duracao_total = request.POST.get('duracao_total')
         cliente = request.POST.get('cliente')
+        procedimento = request.POST.get('procedimento')
 
         horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana = data.weekday).order_by('-id')[:1]
-
+        hora_final = hora_inicial + procedimento
         agendamento = Agendamentos.objects.filter(id_usuario_salao= request.user.id, data = data,
                                                   hora_inicial=hora_inicial, hora_final = hora_final)
         if horario[0].hora_final < hora_final:
