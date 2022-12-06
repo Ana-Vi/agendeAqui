@@ -8,3 +8,4 @@ class Procedimentos(models.Model):
     duracao = models.TimeField()
     valor = models.FloatField()
     id_usuario = models.CharField(max_length=6)
+    id_procedimento = models.CharField(max_length=6, default="")
