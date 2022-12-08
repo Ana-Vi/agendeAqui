@@ -5,6 +5,7 @@ from agendamento.models import Agendamentos
 from horario.models import Horarios
 from procedimento.models import Procedimentos
 from sistema.models import Usuario
+from datetime import datetime
 
 
 # Create your views here.
@@ -19,12 +20,12 @@ def cadastrar(request):
         }
         return render(request, 'agendamento/cadastrar.html', data)
     else:
-        hora_inicial = request.POST.get('hora_inicial')
-        data = request.POST.get('data')
-        valor_total = request.POST.get('valor_total')
-        duracao_total = request.POST.get('duracao_total')
+        hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H-%M')
+        data = datetime.strptime(request.POST.get('data'), '%Y-%m-%d')
         cliente = request.POST.get('cliente')
         procedimento = Procedimentos.objects.get(pk = request.POST.get('procedimento'))
+        valor_total = procedimento[0].valor
+        duracao_total = procedimento[0].duracao
 
         horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana = data.weekday).order_by('-id')[:1]
         hora_final = hora_inicial + procedimento[0].duracao
