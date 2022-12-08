@@ -1,10 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'home.html' %}
 
-</body>
-</html>
+{% block titulo %}
+Cadastrar procedimento
+{% endblock %}
+
+{% block conteudo %}
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <!-- Basic Layout -->
+              <div class="row">
+                <div class="col-8 m-auto">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5 class="mb-0">Cadastrar procedimento</h5>
+                    </div>
+                    <div class="card-body">
+                      <form id="cadastrar" name="cadastrar"  method="POST" >
+                         {% csrf_token %}
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-fullname">Nome do procedimento</label>
+                          <input type="text" name="nome" class="form-control" id="basic-default-fullname" />
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-company">Duração</label>
+                          <input type="time" name="duracao" class="form-control" id="basic-default-company" />
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-email">Valor</label>
+                          <div class="input-group input-group-merge">
+                            <span class="input-group-text" id="basic-default-email2">R$</span>
+                            <input
+                              type="number"
+                              name="valor"
+                              id="basic-default-email"
+                              class="form-control"
+                              min="0.00"
+                              max="1000.00"
+                              step="0.01"
+                            />
+
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}

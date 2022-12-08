@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'home.html' %}
 
-</body>
-</html>
+{% block titulo %}
+Realizar agendamento
+{% endblock %}
+
+{% block conteudo %}
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <!-- Basic Layout -->
+              <div class="row">
+                <div class="col-8 m-auto">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5 class="mb-0">Realizar Agendamento</h5>
+                    </div>
+                    <div class="card-body">
+                      <form id="cadastrar" name="cadastrar"  method="POST" >
+                         {% csrf_token %}
+                        <div class="mb-3">
+                          <label for="exampleFormControlSelect1" class="form-label">Procedimento</label>
+                          <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                          <option selected>Selecione um procedimento</option>
+                            {% for item in procedimentos %}
+                            <option value="{{ item.id }}">{{ item.nome }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                        <div class="mb-3">
+                         <label for="html5-date-input" class="col-md-2 col-form-label">Data</label>
+                          <div class="col-md-12">
+                            <input class="form-control" type="date" name="data" value="" id="html5-date-input" />
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="html5-time-input" class="col-md-2 col-form-label">Hora de inicio</label>
+                            <div class="col-md-12">
+                              <input class="form-control" type="time" name="hora_inicial" value="" id="html5-time-input" />
+                            </div>
+                          </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}
