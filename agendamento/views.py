@@ -20,7 +20,7 @@ def cadastrar(request):
         }
         return render(request, 'agendamento/cadastrar.html', data)
     else:
-        hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H-%M')
+        hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H:%M')
         data = datetime.strptime(request.POST.get('data'), '%Y-%m-%d')
         cliente = request.POST.get('cliente')
         procedimento = Procedimentos.objects.get(pk = request.POST.get('procedimento'))
