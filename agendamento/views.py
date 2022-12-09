@@ -20,17 +20,20 @@ def cadastrar(request):
         }
         return render(request, 'agendamento/cadastrar.html', data)
     else:
-        hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H:%M')
+        hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H:%M').strftime('%H:%M')
         data = datetime.strptime(request.POST.get('data'), '%Y-%m-%d')
         cliente = request.POST.get('cliente')
         procedimento = Procedimentos.objects.get(pk = request.POST.get('procedimento'))
         valor_total = procedimento.valor
         duracao_total = procedimento.duracao
+        data_semana = data.weekday()
 
-        horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana = data.weekday).order_by('-id')[:1]
-        hora_final = hora_inicial + procedimento.duracao
+        horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana = data_semana)
+        hora_final = hora_inicial + procedimento.duracao.strftime('%H:%M')
         agendamento = Agendamentos.objects.filter(id_usuario_salao= request.user.id, data = data,
                                                   hora_inicial=hora_inicial, hora_final = hora_final)
+
+        #parei aqui
         if horario[0].hora_final < hora_final:
             return HttpResponse(
                 'Erro! O horário: ' + hora_final + ' está após a hora de fechamento do salão')
