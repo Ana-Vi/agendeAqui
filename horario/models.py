@@ -7,4 +7,4 @@ class Horarios(models.Model):
     hora_inicial: models.TimeField(default='')
     hora_final: models.TimeField(default='')
     dia_semana: models.IntegerField()
-    id_usuario: models.CharField()
+    id_usuario = models.CharField(max_length=6)
