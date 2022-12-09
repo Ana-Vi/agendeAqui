@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'home.html' %}
 
-</body>
-</html>
+{% block titulo %}
+Alterar horario
+{% endblock %}
+
+{% block conteudo %}
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <!-- Basic Layout -->
+              <div class="row">
+                <div class="col-8 m-auto">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5 class="mb-0">Alterar horario</h5>
+                    </div>
+                    <div class="card-body">
+                      <form id="cadastrar" name="cadastrar"  method="POST" >
+                         {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="hora_inicial" class="col-md-2 col-form-label">Abre às</label>
+                            <div class="col-md-12">
+                              <input class="form-control" type="time" name="hora_inicial" value="" id="hora_inicial" />
+                            </div>
+                          </div>
+                           <div class="mb-3">
+                            <label for="hora_final" class="col-md-2 col-form-label">Fecha às</label>
+                            <div class="col-md-12">
+                              <input class="form-control" type="time" name="hora_final" value="" id="hora_final" />
+                            </div>
+                          </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}

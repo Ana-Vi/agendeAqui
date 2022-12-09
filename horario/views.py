@@ -8,7 +8,7 @@ from sistema.models import Usuario
 # Create your views here.
 def horario(request):
     salao = Usuario.objects.filter(codigo_auth_user=request.user.id)
-    horario = Horarios.objects.filter(id_usuario=request.user.id).order_by('-id')
+    horario = Horarios.objects.filter(id_usuario=request.user.id).order_by('id')
     if salao == 0 or salao == '':
         return HttpResponse('Salão não encontrado')
     data = {
