@@ -18,7 +18,7 @@ Realizar agendamento
                          {% csrf_token %}
                         <div class="mb-3">
                           <label for="exampleFormControlSelect1" class="form-label">Procedimento</label>
-                          <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                          <select class="form-select" id="exampleFormControlSelect1" name="procedimento" aria-label="Default select example">
                           <option selected>Selecione um procedimento</option>
                             {% for item in procedimentos %}
                             <option value="{{ item.id }}">{{ item.nome }}</option>

@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Horarios(models.Model):
-    hora_inicial: models.TimeField(default='')
-    hora_final: models.TimeField(default='')
-    dia_semana: models.IntegerField()
-    id_usuario = models.CharField(max_length=6)
+    hora_inicial = models.TimeField(null=True)
+    hora_final = models.TimeField(null=True)
+    dia_semana = models.IntegerField(default=0)
+    id_usuario = models.CharField(max_length=6, default="")

@@ -24,11 +24,11 @@ def cadastrar(request):
         data = datetime.strptime(request.POST.get('data'), '%Y-%m-%d')
         cliente = request.POST.get('cliente')
         procedimento = Procedimentos.objects.get(pk = request.POST.get('procedimento'))
-        valor_total = procedimento[0].valor
-        duracao_total = procedimento[0].duracao
+        valor_total = procedimento.valor
+        duracao_total = procedimento.duracao
 
         horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana = data.weekday).order_by('-id')[:1]
-        hora_final = hora_inicial + procedimento[0].duracao
+        hora_final = hora_inicial + procedimento.duracao
         agendamento = Agendamentos.objects.filter(id_usuario_salao= request.user.id, data = data,
                                                   hora_inicial=hora_inicial, hora_final = hora_final)
         if horario[0].hora_final < hora_final:
@@ -44,7 +44,7 @@ def cadastrar(request):
         else:
             agendamento = Agendamentos(id_usuario_salao= request.user.id,hora_inicial=hora_inicial, hora_final=hora_final,
                                        data = data, valor_total=valor_total, duracao_total=duracao_total, cliente= cliente,
-                                       id_procedimento = procedimento[0].id)
+                                       id_procedimento = procedimento.id)
             agendamento.save()
             return redirect('agenda')
 
