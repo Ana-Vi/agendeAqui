@@ -49,7 +49,8 @@ def cadastrar(request):
         timea_h_f = timedelta(hours=horas, minutes=minutos)
 
         agendamento = Agendamentos.objects.filter(id_usuario_salao= request.user.id, data = data,
-                                                  hora_inicial=hora_inicial, hora_final = horaa_final)
+                                                  hora_final__range=[hora_inicial, horaa_final],
+                                                  hora_inicial__range=[hora_inicial, horaa_final])
 
         if timea_h_i > timeh_h_f:
             context = {
@@ -72,10 +73,10 @@ def cadastrar(request):
             }
             return render(request, 'agendamento/cadastrar.html', context)
         else:
-            agendamento = Agendamentos(id_usuario_salao= request.user.id,hora_inicial=hora_inicial, hora_final=horaa_final,
+            agendamento_salvar = Agendamentos(id_usuario_salao= request.user.id,hora_inicial=hora_inicial, hora_final=horaa_final,
                                        data = data, valor_total=valor_total, duracao_total=procedimento.duracao, cliente= cliente,
                                        id_procedimento = procedimento.id)
-            agendamento.save()
+            agendamento_salvar.save()
             return redirect('agenda')
 
 
