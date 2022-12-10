@@ -5,7 +5,7 @@ from agendamento.models import Agendamentos
 from horario.models import Horarios
 from procedimento.models import Procedimentos
 from sistema.models import Usuario
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 # Create your views here.
@@ -21,29 +21,46 @@ def cadastrar(request):
         }
         return render(request, 'agendamento/cadastrar.html', data)
     else:
+        procedimento = Procedimentos.objects.get(pk=request.POST.get('procedimento'))
+
         hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H:%M').strftime('%H:%M')
+        horas,minutos = map(int, hora_inicial.split(':'))
+        timea_h_i = timedelta(hours=horas, minutes=minutos)
+        duracao = procedimento.duracao.strftime('%H:%M')
         data = datetime.strptime(request.POST.get('data'), '%Y-%m-%d')
         cliente = request.POST.get('cliente')
-        procedimento = Procedimentos.objects.get(pk = request.POST.get('procedimento'))
-        valor_total = procedimento.valor
-        duracao_total = procedimento.duracao
+
         data_semana = data.weekday()
+        horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana=data_semana)
+        horah_inicial = horario[0].hora_final.strftime('%H:%M')
+        horas, minutos = map(int, horah_inicial.split(':'))
+        timeh_h_f = timedelta(hours=horas, minutes=minutos)
+        horah_final = horario[0].hora_inicial.strftime('%H:%M')
+        horas, minutos = map(int, horah_final.split(':'))
+        timeh_h_i = timedelta(hours=horas, minutes=minutos)
+        valor_total = procedimento.valor
 
-        horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana = data_semana)
-        hora_final = hora_inicial + procedimento.duracao.strftime('%H:%M')
+        horas, minutos = map(int, duracao.split(':'))
+        soma_duracao_total = timedelta(hours=horas, minutes=minutos)
+        soma_hora_inicial = datetime.strptime(hora_inicial, '%H:%M')
+        horaa_final = soma_hora_inicial + soma_duracao_total
+        horaa_final = horaa_final.strftime('%H:%M')
+        horas, minutos = map(int, horaa_final.split(':'))
+        timea_h_f = timedelta(hours=horas, minutes=minutos)
+
         agendamento = Agendamentos.objects.filter(id_usuario_salao= request.user.id, data = data,
-                                                  hora_inicial=hora_inicial, hora_final = hora_final)
+                                                  hora_inicial=hora_inicial, hora_final = horaa_final)
 
-        if horario[0].hora_final.strftime('%H:%M') < hora_final:
+        if timea_h_i > timeh_h_f:
             context = {
                 'Erro': 'Erro! O horário está após a hora de fechamento do salão'
             }
-            return render(request, 'agendamento/cadastrar', context)
-        if horario[0].hora_inicial.strftime('%H:%M') > hora_inicial:
+            return render(request, 'agendamento/cadastrar.html', context)
+        if timea_h_f < timeh_h_i:
             context = {
                 'Erro': 'Erro! O horário está antes da hora de abertura do salão'
             }
-            return render(request, 'agendamento/cadastrar', context)
+            return render(request, 'agendamento/cadastrar.html', context)
         if agendamento:
             context = {
                 'Erro': 'Erro! O horário está sendo usado por outro cadastro!'
@@ -55,8 +72,8 @@ def cadastrar(request):
             }
             return render(request, 'agendamento/cadastrar.html', context)
         else:
-            agendamento = Agendamentos(id_usuario_salao= request.user.id,hora_inicial=hora_inicial, hora_final=hora_final,
-                                       data = data, valor_total=valor_total, duracao_total=duracao_total, cliente= cliente,
+            agendamento = Agendamentos(id_usuario_salao= request.user.id,hora_inicial=hora_inicial, hora_final=horaa_final,
+                                       data = data, valor_total=valor_total, duracao_total=procedimento.duracao, cliente= cliente,
                                        id_procedimento = procedimento.id)
             agendamento.save()
             return redirect('agenda')
@@ -112,7 +129,7 @@ def update(request, pk):
                 'Erro': 'Erro! O horário está antes da hora de abertura do salão'
             }
             return render(request, 'agendamento/cadastrar', context)
-        if agendamento:
+        if agendamento and agendamento[0].id !=pk:
             context = {
                 'Erro': 'Erro! O horário está sendo usado por outro cadastro!'
             }

@@ -62,6 +62,34 @@ def cadastro(request):
                     horario.save()
                 return redirect('login')
 
+@login_required(login_url="/")
+def update(request):
+    user = User.objects.get(pk=request.user.id)
+    usuario = Usuario.objects.filter(codigo_auth_user=request.user.id)
+    usuario = Usuario.objects.get(pk = usuario[0].id)
+    if request.method == "GET":
+        data = {
+            'user' : user,
+            'usuario': usuario,
+        }
+        return render(request, 'sistema/atualiza-user.html', data)
+    else:
+        nome = request.POST.get('nome')
+        senha = request.POST.get('senha')
+        cpf = request.POST.get('cpf')
+        telefone = request.POST.get('telefone')
 
+        user.set_password(senha)
+        user.save()
+        usuario.nome = nome
+        usuario.cpf = cpf
+        usuario.telefone = telefone
+        usuario.senha = senha
+        usuario.save()
+        return redirect('horario')
 
+def erro404(request, exception):
+    return render(request, '404.html')
 
+def erro500(request, exception):
+    return render(request,'500.html')

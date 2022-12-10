@@ -23,3 +23,4 @@ urlpatterns = [
     path('procedimento/', include('procedimento.urls')),
     path('', include('sistema.urls')),
 ]
+handler404 = 'sistema.views.erro404'
