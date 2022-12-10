@@ -36,10 +36,12 @@ def cadastrar(request):
 @login_required(login_url="/")
 def update(request,pk):
     if request.method =="GET":
+        procedimento = Procedimentos.objects.get(pk=pk)
         data = {
             'nomefuncao' : 'Atualizar procedimento',
-            'procedimento': Procedimentos.objects.get(pk=pk)
+            'procedimento': procedimento
         }
+        data['valor']=str(procedimento.valor).replace(',','.')
         return render(request,'procedimento/cadastrar.html', data)
     else:
         nome = request.POST.get('nome')

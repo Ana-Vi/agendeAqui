@@ -19,13 +19,13 @@ Alterar horario
                         <div class="mb-3">
                             <label for="hora_inicial" class="col-md-2 col-form-label">Abre às</label>
                             <div class="col-md-12">
-                              <input class="form-control" type="time" name="hora_inicial" value="" id="hora_inicial" />
+                              <input class="form-control" type="time" name="hora_inicial" value="{{db.hora_inicial}}" id="hora_inicial" />
                             </div>
                           </div>
                            <div class="mb-3">
                             <label for="hora_final" class="col-md-2 col-form-label">Fecha às</label>
                             <div class="col-md-12">
-                              <input class="form-control" type="time" name="hora_final" value="" id="hora_final" />
+                              <input class="form-control" type="time" name="hora_final" value="{{db.hora_final}}" id="hora_final" />
                             </div>
                           </div>
                         <button type="submit" class="btn btn-primary">Enviar</button>

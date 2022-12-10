@@ -88,7 +88,7 @@ def update(request, pk):
             'procedimento': procedimento,
             'modo': 'update'
         }
-        data['db'].data = data['db'].data.strftime('%d/%m/%Y')
+        data['db'].data = data['db'].data.strftime('%Y-%m-%d')
         return render(request, "agendamento/cadastrar.html", data)
     else:
         hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H:%M').strftime('%H:%M')
