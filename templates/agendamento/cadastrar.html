@@ -13,9 +13,19 @@ Realizar agendamento
                     <div class="card-header d-flex justify-content-between align-items-center">
                       <h5 class="mb-0">Realizar Agendamento</h5>
                     </div>
+                     <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5 class="mb-0">{{Erro}}</h5>
+                    </div>
                     <div class="card-body">
                       <form id="cadastrar" name="cadastrar"  method="POST" >
                          {% csrf_token %}
+                        <div class="mb-3">
+                           <label for="cliente" class="col-md-2 col-form-label">Cliente</label>
+                             <div class="col-md-12">
+                                <input class="form-control" type="text" name="cliente" value="{{db.cliente}}" id="cliente" />
+                             </div>
+                        </div>
+                          {% if modo == "create" %}
                         <div class="mb-3">
                           <label for="exampleFormControlSelect1" class="form-label">Procedimento</label>
                           <select class="form-select" id="exampleFormControlSelect1" name="procedimento" aria-label="Default select example">
@@ -25,16 +35,25 @@ Realizar agendamento
                             {% endfor %}
                         </select>
                         </div>
+                          {% endif %}
+                          {% if modo == "update" %}
+                          <div class="mb-3">
+                           <label for="procedimento" class="col-md-2 col-form-label">Procedimento</label>
+                             <div class="col-md-12">
+                                <input class="form-control" type="text" name="procedimento" value="{{ procedimento.nome }}" id="procedimento" disabled/>
+                             </div>
+                        </div>
+                          {% endif %}
                         <div class="mb-3">
                          <label for="html5-date-input" class="col-md-2 col-form-label">Data</label>
                           <div class="col-md-12">
-                            <input class="form-control" type="date" name="data" value="" id="html5-date-input" />
+                            <input class="form-control" type="date" name="data" value="{{db.data}}" id="html5-date-input" />
                           </div>
                         </div>
                         <div class="mb-3">
                             <label for="html5-time-input" class="col-md-2 col-form-label">Hora de inicio</label>
                             <div class="col-md-12">
-                              <input class="form-control" type="time" name="hora_inicial" value="" id="html5-time-input" />
+                              <input class="form-control" type="time" name="hora_inicial" value="{{db.hora_inicial}}" id="html5-time-input" />
                             </div>
                           </div>
                         <button type="submit" class="btn btn-primary">Enviar</button>

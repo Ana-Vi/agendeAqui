@@ -16,7 +16,8 @@ def cadastrar(request):
     if request.method == "GET":
         data = {
             'nomefuncao': 'Agendar Horário',
-            'procedimentos': Procedimentos.objects.filter(id_usuario = request.user.id)
+            'procedimentos': Procedimentos.objects.filter(id_usuario = request.user.id),
+            'modo': 'create'
         }
         return render(request, 'agendamento/cadastrar.html', data)
     else:
@@ -33,17 +34,26 @@ def cadastrar(request):
         agendamento = Agendamentos.objects.filter(id_usuario_salao= request.user.id, data = data,
                                                   hora_inicial=hora_inicial, hora_final = hora_final)
 
-        #parei aqui
-        if horario[0].hora_final < hora_final:
-            return HttpResponse(
-                'Erro! O horário: ' + hora_final + ' está após a hora de fechamento do salão')
-        if horario[0].hora_inicial > hora_inicial:
-            return HttpResponse(
-                'Erro! O horário: ' + hora_inicial + 'está antes da hora de abertura do salão')
+        if horario[0].hora_final.strftime('%H:%M') < hora_final:
+            context = {
+                'Erro': 'Erro! O horário está após a hora de fechamento do salão'
+            }
+            return render(request, 'agendamento/cadastrar', context)
+        if horario[0].hora_inicial.strftime('%H:%M') > hora_inicial:
+            context = {
+                'Erro': 'Erro! O horário está antes da hora de abertura do salão'
+            }
+            return render(request, 'agendamento/cadastrar', context)
         if agendamento:
-            return HttpResponse('Erro! O horário: ' + data + '->' + hora_inicial + ' está sendo usado por outro cadastro')
+            context = {
+                'Erro': 'Erro! O horário está sendo usado por outro cadastro!'
+            }
+            return render(request, 'agendamento/cadastrar.html', context)
         elif data == '':
-            return HttpResponse('Insira a data')
+            context = {
+                'Erro': 'Insira a data'
+            }
+            return render(request, 'agendamento/cadastrar.html', context)
         else:
             agendamento = Agendamentos(id_usuario_salao= request.user.id,hora_inicial=hora_inicial, hora_final=hora_final,
                                        data = data, valor_total=valor_total, duracao_total=duracao_total, cliente= cliente,
@@ -57,7 +67,10 @@ def agenda(request):
     salao = Usuario.objects.filter(codigo_auth_user = request.user.id)
     agenda = Agendamentos.objects.filter(id_usuario_salao = request.user.id)
     if salao == 0 or salao == '':
-        return HttpResponse('Salão não encontrado')
+        context = {
+            'Erro': 'Salão não encontrado!'
+        }
+        return render(request, 'agendamento/agenda.html',context)
     data = {
         'nome_funcao': 'Minha agenda',
         'id_usuario_salao': salao,
@@ -67,34 +80,48 @@ def agenda(request):
 
 @login_required(login_url="/")
 def update(request, pk):
+    agendamento = Agendamentos.objects.get(pk=pk)
+    procedimento = Procedimentos.objects.get(pk=agendamento.id_procedimento)
     if request.method == "GET":
         data = {
-            'db': Agendamentos.objects.get(pk=pk),
+            'db': agendamento,
+            'procedimento': procedimento,
+            'modo': 'update'
         }
+        data['db'].data = data['db'].data.strftime('%d/%m/%Y')
         return render(request, "agendamento/cadastrar.html", data)
     else:
-        hora_inicial = request.POST.get('hora_inicial')
-        hora_final = request.POST.get('hora_final')
-        data = request.POST.get('data')
-        valor_total = request.POST.get('valor_total')
-        duracao_total = request.POST.get('duracao_total')
+        hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H:%M').strftime('%H:%M')
+        data = datetime.strptime(request.POST.get('data'), '%Y-%m-%d')
+        hora_final = hora_inicial + procedimento.duracao.strftime('%H:%M')
         cliente = request.POST.get('cliente')
-
+        valor_total = procedimento.valor
+        duracao_total = procedimento.duracao
+        data_semana = data.weekday()
         agendamento = Agendamentos.objects.filter(id_usuario_salao=request.user.id, data=data,
                                                   hora_inicial=hora_inicial, hora_final=hora_final)
-        horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana=data.weekday).order_by('-id')[:1]
+        horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana=data_semana)
 
-        if horario[0].hora_final < hora_final:
-            return HttpResponse(
-                'Erro! O horário: ' + hora_final + ' está após a hora de fechamento do salão')
-        elif horario[0].hora_inicial > hora_inicial:
-            return HttpResponse(
-                'Erro! O horário: ' + hora_inicial + 'está antes da hora de abertura do salão')
-        elif agendamento:
-            return HttpResponse(
-                'Erro! O horário: ' + data + '->' + hora_inicial + ' está sendo usado por outro cadastro')
+        if horario[0].hora_final.strftime('%H:%M') < hora_final:
+            context = {
+                'Erro': 'Erro! O horário está após a hora de fechamento do salão'
+            }
+            return render(request, 'agendamento/cadastrar', context)
+        if horario[0].hora_inicial.strftime('%H:%M') > hora_inicial:
+            context = {
+                'Erro': 'Erro! O horário está antes da hora de abertura do salão'
+            }
+            return render(request, 'agendamento/cadastrar', context)
+        if agendamento:
+            context = {
+                'Erro': 'Erro! O horário está sendo usado por outro cadastro!'
+            }
+            return render(request, 'agendamento/cadastrar.html', context)
         elif data == '':
-            return HttpResponse('Insira a data')
+            context = {
+                'Erro': 'Insira a data'
+            }
+            return render(request, 'agendamento/cadastrar.html', context)
         else:
             agendamento = Agendamentos.objects.get(id=pk)
             agendamento.hora_inicial = hora_inicial
@@ -107,6 +134,9 @@ def update(request, pk):
 
             agendamento.save()
             return redirect('agenda')
+
+
+@login_required(login_url="/")
 def delete(request, pk):
     db = Agendamentos.objects.get(pk=pk)
     db.delete()

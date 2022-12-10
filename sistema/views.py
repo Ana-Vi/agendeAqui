@@ -11,9 +11,6 @@ from django.core.paginator import Paginator
 # Create your views here.
 def login(request):
     if request.method == "GET":
-        data = {
-            'nomefuncao': 'Login',
-        }
         return render(request, 'sistema/login.html')
     else:
         username = request.POST.get('username')
@@ -21,9 +18,12 @@ def login(request):
         user = authenticate(username=username, password=senha)
         if user:
             login_django(request, user)
-            return redirect('home')
+            return redirect('horario')
         else:
-            return HttpResponse("Inválido")
+            data = {
+                'Erro': 'Erro! Usuário incorreto!'
+            }
+            return render(request, 'sistema/login.html', data)
 
 
 
@@ -41,11 +41,17 @@ def cadastro(request):
         telefone = request.POST.get('telefone')
         usuario = Usuario.objects.filter(email=email)
         if usuario:
-            return HttpResponse('Erro! O e-mail: ' + email + ' está sendo usado por outro cadastro')
+            data = {
+                'Erro': 'Erro! O e-mail: ' + email + ' está sendo usado por outro cadastro!'
+            }
+            return render(request, 'sistema/cadastro.html', data)
         else:
             user = User.objects.filter(email=email)
             if user:
-                return HttpResponse('Erro! O e-mail: ' + email + ' está sendo usado por outro cadastro')
+                data = {
+                    'Erro': 'Erro! O e-mail: ' + email + ' está sendo usado por outro cadastro!'
+                }
+                return render(request, 'sistema/cadastro.html', data)
             else:
                 user = User.objects.create_user(email, email, senha)
                 user.save()
@@ -57,6 +63,5 @@ def cadastro(request):
                 return redirect('login')
 
 
-@login_required(login_url="/")
-def home(request):
-    return render(request, 'agendamento/agenda.html')
+
+

@@ -11,3 +11,4 @@ class Agendamentos(models.Model):
     valor_total = models.FloatField()
     duracao_total = models.TimeField()
     cliente = models.CharField(max_length=200, default="")
+    id_procedimento = models.CharField(max_length=6, default='')

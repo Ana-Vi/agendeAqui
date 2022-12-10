@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -6,18 +7,21 @@ from sistema.models import Usuario
 
 
 # Create your views here.
+@login_required(login_url="/")
 def horario(request):
     salao = Usuario.objects.filter(codigo_auth_user=request.user.id)
     horario = Horarios.objects.filter(id_usuario=request.user.id).order_by('id')
-    if salao == 0 or salao == '':
-        return HttpResponse('Salão não encontrado')
     data = {
         'nome_funcao': 'Meu Horário',
         'id_usuario_salao': salao,
         'horario': horario,
     }
+    if salao == 0 or salao == '':
+        data['Erro']='Erro! Salão não encontrado!'
+
     return render(request, 'horario/horario.html', data)
 
+@login_required(login_url="/")
 def update(request, pk):
     if request.method == "GET":
         data = {
