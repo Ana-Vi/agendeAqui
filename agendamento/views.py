@@ -22,14 +22,12 @@ def cadastrar(request):
         return render(request, 'agendamento/cadastrar.html', data)
     else:
         procedimento = Procedimentos.objects.get(pk=request.POST.get('procedimento'))
-
         hora_inicial = datetime.strptime(request.POST.get('hora_inicial'), '%H:%M').strftime('%H:%M')
         horas,minutos = map(int, hora_inicial.split(':'))
         timea_h_i = timedelta(hours=horas, minutes=minutos)
         duracao = procedimento.duracao.strftime('%H:%M')
         data = datetime.strptime(request.POST.get('data'), '%Y-%m-%d')
         cliente = request.POST.get('cliente')
-
         data_semana = data.weekday()
         horario = Horarios.objects.filter(id_usuario=request.user.id, dia_semana=data_semana)
         horah_inicial = horario[0].hora_final.strftime('%H:%M')
@@ -39,7 +37,6 @@ def cadastrar(request):
         horas, minutos = map(int, horah_final.split(':'))
         timeh_h_i = timedelta(hours=horas, minutes=minutos)
         valor_total = procedimento.valor
-
         horas, minutos = map(int, duracao.split(':'))
         soma_duracao_total = timedelta(hours=horas, minutes=minutos)
         soma_hora_inicial = datetime.strptime(hora_inicial, '%H:%M')
