@@ -56,13 +56,18 @@ Realizar agendamento
                               <input class="form-control" type="time" name="hora_inicial" value="{{db.hora_inicial}}" id="html5-time-input" />
                             </div>
                           </div>
-                          {% if create == 1 %}
-                            <a href="/agendamento/cadastrar/"><button type="button" class="btn btn-danger">Recomeçar</button></a>
-                          {% elif update == 1 %}
-                            <a href="/agendamento/update/{{id}}"><button type="button" class="btn btn-danger">Recomeçar</button></a>
-                          {% else %}
-                          <button type="submit" class="btn btn-primary">Enviar</button>
-                          {% endif %}
+                          <div style="display: flex; justify-content: space-between">
+                              <button type="button" class="btn btn-warning">
+                                <a href="{% url 'agenda' %}" style="color: #fff">Cancelar</a>
+                              </button>
+                               {% if create == 1 %}
+                                <a href="/agendamento/cadastrar/"><button type="button" class="btn btn-danger">Recomeçar</button></a>
+                              {% elif update == 1 %}
+                                <a href="/agendamento/update/{{id}}"><button type="button" class="btn btn-danger">Recomeçar</button></a>
+                              {% else %}
+                                <button type="submit" class="btn btn-primary">Enviar</button>
+                              {% endif %}
+                          </div>
                       </form>
                     </div>
                   </div>

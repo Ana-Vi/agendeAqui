@@ -28,7 +28,12 @@ Alterar horario
                               <input class="form-control" type="time" name="hora_final" value="{{db.hora_final}}" id="hora_final" />
                             </div>
                           </div>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                          <div style="display: flex; justify-content: space-between">
+                              <button type="button" class="btn btn-warning">
+                                <a href="{% url 'horario' %}" style="color: #fff">Cancelar</a>
+                              </button>
+                              <button type="submit" class="btn btn-primary">Enviar</button>
+                          </div>
                       </form>
                     </div>
                   </div>

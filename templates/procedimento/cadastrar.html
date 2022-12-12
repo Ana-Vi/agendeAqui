@@ -41,7 +41,12 @@ Cadastrar procedimento
 
                           </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <div style="display: flex; justify-content: space-between">
+                              <button type="button" class="btn btn-warning">
+                                <a href="{% url 'procedimento' %}" style="color: #fff">Cancelar</a>
+                              </button>
+                              <button type="submit" class="btn btn-primary">Enviar</button>
+                          </div>
                       </form>
                     </div>
                   </div>
