@@ -15,6 +15,7 @@ def horario(request):
         'nome_funcao': 'Meu Horário',
         'id_usuario_salao': salao,
         'horario': horario,
+        'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
     }
     if salao == 0 or salao == '':
         data['Erro']='Erro! Salão não encontrado!'
@@ -27,6 +28,7 @@ def update(request, pk):
         data = {
             'nomefuncao': 'Horário Funcionamento',
             'db': Horarios.objects.get(pk=pk),
+            'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
         }
         return render(request, 'horario/cadastrar.html', data)
     else:

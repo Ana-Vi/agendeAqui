@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-
 from procedimento.models import Procedimentos
+from sistema.models import Usuario
 
 
 # Create your views here.
@@ -10,7 +10,8 @@ from procedimento.models import Procedimentos
 def procedimento(request):
     data = {
         'nomefuncao': 'Procedimento',
-        'db': Procedimentos.objects.filter(id_usuario= request.user.id)
+        'db': Procedimentos.objects.filter(id_usuario= request.user.id),
+        'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
     }
     return render(request, 'procedimento/procedimento.html', data)
 
@@ -19,6 +20,7 @@ def cadastrar(request):
     if request.method == "GET":
         data = {
             'nomefuncao': "Novo procedimento",
+            'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
         }
         return render(request, 'procedimento/cadastrar.html', data)
     else:
@@ -39,7 +41,8 @@ def update(request,pk):
         procedimento = Procedimentos.objects.get(pk=pk)
         data = {
             'nomefuncao' : 'Atualizar procedimento',
-            'procedimento': procedimento
+            'procedimento': procedimento,
+            'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
         }
         data['valor']=str(procedimento.valor).replace(',','.')
         return render(request,'procedimento/cadastrar.html', data)

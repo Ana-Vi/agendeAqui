@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from agendamento.models import Agendamentos
 from horario.models import Horarios
@@ -13,12 +12,12 @@ from datetime import datetime, timedelta
 
 @login_required(login_url="/")
 def cadastrar(request):
-
     if request.method == "GET":
         data = {
             'nomefuncao': 'Agendar Horário',
             'procedimentos': Procedimentos.objects.filter(id_usuario = request.user.id),
             'modo': 'create',
+            'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
 
         }
         return render(request, 'agendamento/cadastrar.html', data)
@@ -59,6 +58,7 @@ def cadastrar(request):
                 'Erro': 'Erro! O horário está após a hora de fechamento do salão',
                 'create': 1,
                 'update': 0,
+                'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
             }
             return render(request, 'agendamento/cadastrar.html', context)
         if timea_h_f < timeh_h_i:
@@ -66,6 +66,7 @@ def cadastrar(request):
                 'Erro': 'Erro! O horário está antes da hora de abertura do salão',
                 'create': 1,
                 'update': 0,
+                'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
             }
             return render(request, 'agendamento/cadastrar.html', context)
         if agendamento:
@@ -73,11 +74,15 @@ def cadastrar(request):
                 'Erro': 'Erro! O horário está sendo usado por outro cadastro!',
                 'create': 1,
                 'update': 0,
+                'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
             }
             return render(request, 'agendamento/cadastrar.html', context)
         elif data == '':
             context = {
-                'Erro': 'Insira a data'
+                'Erro': 'Insira a data',
+                'create': 1,
+                'update': 0,
+                'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
             }
             return render(request, 'agendamento/cadastrar.html', context)
         else:
@@ -96,13 +101,15 @@ def agenda(request):
 
     if salao == 0 or salao == '':
         context = {
-            'Erro': 'Salão não encontrado!'
+            'Erro': 'Salão não encontrado!',
+            'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
         }
         return render(request, 'agendamento/agenda.html',context)
     data = {
         'nome_funcao': 'Minha agenda',
         'id_usuario_salao': salao,
         'agenda': agenda,
+        'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
     }
     return render(request, 'agendamento/agenda.html', data)
 
@@ -114,7 +121,8 @@ def update(request, pk):
         data = {
             'db': agendamento,
             'procedimento': procedimento,
-            'modo': 'update'
+            'modo': 'update',
+            'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
         }
         data['db'].data = data['db'].data.strftime('%Y-%m-%d')
         return render(request, "agendamento/cadastrar.html", data)
@@ -155,7 +163,8 @@ def update(request, pk):
                     'Erro': 'Erro! O horário está sendo usado por outro cadastro!',
                     'create':0,
                     'update':1,
-                    'id': pk
+                    'id': pk,
+                    'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
                 }
                 return render(request, 'agendamento/cadastrar.html', context)
 
@@ -164,7 +173,8 @@ def update(request, pk):
                 'Erro': 'Erro! O horário está após a hora de fechamento do salão',
                 'create': 0,
                 'update': 1,
-                'id': pk
+                'id': pk,
+                'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
             }
             return render(request, 'agendamento/cadastrar.html', context)
         elif timea_h_f < timeh_h_i:
@@ -172,7 +182,8 @@ def update(request, pk):
                 'Erro': 'Erro! O horário está antes da hora de abertura do salão',
                 'create': 0,
                 'update': 1,
-                'id': pk
+                'id': pk,
+                'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
             }
             return render(request, 'agendamento/cadastrar.html', context)
         elif data == '':
@@ -180,7 +191,8 @@ def update(request, pk):
                 'Erro': 'Insira a data',
                 'create': 0,
                 'update': 1,
-                'id': pk
+                'id': pk,
+                'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
             }
             return render(request, 'agendamento/cadastrar.html', context)
         else:
