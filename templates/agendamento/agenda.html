@@ -9,24 +9,26 @@
   <div class="row">
     <div class="col-12 col-lg-12 order-2 order-md-3 order-lg-2 mb-4">
       <div class="card">
-                <h5 class="card-header">Light Table head</h5>
-                <div class="table-responsive text-nowrap">
+                <h5 class="card-header">Agendamentos</h5>
+                <div class="table-responsive text-nowrap" style="min-height: 200px;">
                   <table class="table">
                     <thead class="table-light">
                       <tr>
                         <th>Cliente</th>
                         <th>Procedimento</th>
-                        <th>Horario</th>
+                        <th>Hora</th>
+                        <th>Data</th>
                         <th>Preço</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                    <h1>{{ agenda }}</h1>
                     {% for item in agenda %}
                       <tr>
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ item.cliente }}</strong></td>
-                        <td>Albert Cook</td>
-                        <td><span class="badge bg-label-primary me-1">Active</span></td>
+                        <td><i class="fab fa-angular fa-lg me-3"></i> <strong>{{ item.cliente }}</strong></td>
+                        <td>{{ item.procedimento }}</td>
+                        <td><span class="badge bg-label-primary me-1">{{ item.hora_inicial }} h</span></td>
+                        <td><span class="badge bg-label-primary me-1">{{ item.data }}</span></td>
+                        <td><span class="badge bg-label-primary me-1">R$ {{ item.valor_total }}0</span></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -34,10 +36,10 @@
                             </button>
                             <div class="dropdown-menu">
                               <a class="dropdown-item" href="update/{{ item.id }}"
-                                ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                ><i class="bx bx-edit-alt me-1"></i> Editar</a
                               >
                               <a class="dropdown-item" href="delete/{{ item.id }}"
-                                ><i class="bx bx-trash me-1"></i> Delete</a
+                                ><i class="bx bx-trash me-1"></i> Deletar</a
                               >
                             </div>
                           </div>
@@ -48,7 +50,18 @@
                   </table>
                 </div>
               </div>
+       <div class="container-xxl flex-grow-1 container-p-y text-end" >
+            <button class="btn btn-primary">
+                <a href="cadastrar" style="color: #ffff;">Agendar</a>
+            </button>
+        </div>
     </div>
   </div>
 </div>
+<style>
+  tbody td, thead th {
+    text-align: center;
+  }
+</style>
+
 {% endblock %}
