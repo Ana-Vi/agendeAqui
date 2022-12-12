@@ -88,7 +88,8 @@ def cadastrar(request):
 @login_required(login_url="/")
 def agenda(request):
     salao = Usuario.objects.filter(codigo_auth_user = request.user.id)
-    agenda = Agendamentos.objects.filter(id_usuario_salao = request.user.id)
+    dia = datetime.today()
+    agenda = Agendamentos.objects.filter(id_usuario_salao = request.user.id, data = dia)
     if salao == 0 or salao == '':
         context = {
             'Erro': 'Salão não encontrado!'
