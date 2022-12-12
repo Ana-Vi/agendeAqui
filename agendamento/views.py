@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from agendamento.models import Agendamentos
 from horario.models import Horarios
@@ -12,11 +13,13 @@ from datetime import datetime, timedelta
 
 @login_required(login_url="/")
 def cadastrar(request):
+
     if request.method == "GET":
         data = {
             'nomefuncao': 'Agendar Horário',
             'procedimentos': Procedimentos.objects.filter(id_usuario = request.user.id),
-            'modo': 'create'
+            'modo': 'create',
+
         }
         return render(request, 'agendamento/cadastrar.html', data)
     else:
@@ -89,7 +92,8 @@ def cadastrar(request):
 def agenda(request):
     salao = Usuario.objects.filter(codigo_auth_user = request.user.id)
     dia = datetime.today()
-    agenda = Agendamentos.objects.filter(id_usuario_salao = request.user.id, data = dia)
+    agenda = Agendamentos.objects.filter(id_usuario_salao = request.user.id, data = dia).extra(select={'procedimento': 'SELECT nome from procedimento_procedimentos WHERE id = agendamento_agendamentos.id_procedimento '})
+
     if salao == 0 or salao == '':
         context = {
             'Erro': 'Salão não encontrado!'
