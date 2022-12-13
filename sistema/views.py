@@ -70,7 +70,7 @@ def update(request):
     if request.method == "GET":
         data = {
             'user' : user,
-            'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0].nome
+            'usuario': Usuario.objects.filter(codigo_auth_user=request.user.id)[0]
         }
         return render(request, 'sistema/atualiza-user.html', data)
     else:
